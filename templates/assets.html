@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% block content %}
+<div class="d-flex justify-content-between mb-3"><h3>Asset Library</h3>
+<a class="btn btn-primary" href="{{ url_for('upload') }}">+ Upload</a></div>
+<form class="row g-2 mb-4" method="get">
+<div class="col-md-4"><input class="form-control" name="q" value="{{ s }}" placeholder="Search name, tags, description"></div>
+<div class="col-md-2"><select class="form-select" name="category"><option value="">All categories</option>
+{% for c in categories %}<option {{ 'selected' if c == cat }}>{{ c }}</option>{% endfor %}</select></div>
+<div class="col-md-2"><select class="form-select" name="type"><option value="">All types</option>
+{% for t in types %}<option {{ 'selected' if t == ftype }}>{{ t }}</option>{% endfor %}</select></div>
+<div class="col-md-2"><select class="form-select" name="sort">
+<option value="new" {{ 'selected' if sort == 'new' }}>Newest</option>
+<option value="name" {{ 'selected' if sort == 'name' }}>Name</option>
+<option value="size" {{ 'selected' if sort == 'size' }}>Largest</option></select></div>
+<div class="col-md-2"><button class="btn btn-dark w-100">Filter</button></div></form>
+<div class="row g-3">
+{% for a in items %}<div class="col-md-3"><div class="card h-100 hov">
+<a href="{{ url_for('detail', aid=a.id) }}">
+{% if a.thumb %}<img class="card-img-top thumb" src="{{ url_for('static', filename='thumbs/' + a.thumb) }}">
+{% else %}<div class="ph">.{{ a.file_type }}</div>{% endif %}</a>
+<div class="card-body"><h6 class="card-title mb-1">{{ a.name }}</h6>
+<span class="badge bg-secondary">{{ a.category }}</span> <span class="badge bg-info text-dark">v{{ a.version }}</span>
+<div class="small text-muted mt-1">{{ a.file_size|filesize }}</div></div></div></div>
+{% else %}<p class="text-muted">No assets found.</p>{% endfor %}</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block content %}
+<h3 class="mb-3">Dashboard</h3>
+<div class="row g-3 mb-4">
+<div class="col-md-4"><div class="card p-3"><div class="text-muted">Total assets</div><h2>{{ total }}</h2></div></div>
+<div class="col-md-4"><div class="card p-3"><div class="text-muted">Storage used</div><h2>{{ storage|filesize }}</h2></div></div>
+<div class="col-md-4"><div class="card p-3"><div class="text-muted">Registered users</div><h2>{{ users }}</h2></div></div>
+</div>
+<div class="row g-3"><div class="col-md-5"><div class="card p-3"><h5>Assets by category</h5>
+{% for c, n in by_cat %}<div class="d-flex justify-content-between border-bottom py-1"><span>{{ c }}</span><span class="badge bg-primary">{{ n }}</span></div>
+{% else %}<p class="text-muted mb-0">No assets yet.</p>{% endfor %}</div></div>
+<div class="col-md-7"><div class="card p-3"><h5>Recent uploads</h5>
+{% for a in recent %}<div class="d-flex justify-content-between border-bottom py-1">
+<a href="{{ url_for('detail', aid=a.id) }}">{{ a.name }}</a><small class="text-muted">{{ a.created_at.strftime('%d %b %Y') }}</small></div>
+{% else %}<p class="text-muted mb-0">Nothing uploaded yet.</p>{% endfor %}</div></div></div>
+{% endblock %}

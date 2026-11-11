@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block content %}
+<div class="row justify-content-center"><div class="col-md-7"><div class="card p-4 shadow-sm">
+<h4 class="mb-3">{{ 'Edit asset' if a else 'Upload asset' }}</h4>
+<form method="post" enctype="multipart/form-data">
+<label class="form-label">Name</label><input class="form-control mb-3" name="name" value="{{ a.name if a }}" required>
+<label class="form-label">Category</label><select class="form-select mb-3" name="category">
+{% for c in categories %}<option {{ 'selected' if a and a.category == c }}>{{ c }}</option>{% endfor %}</select>
+<label class="form-label">Tags (comma separated)</label><input class="form-control mb-3" name="tags" value="{{ a.tags if a }}" placeholder="medieval, stone, vr-ready">
+<label class="form-label">Polygon count (optional)</label><input class="form-control mb-3" name="poly_count" value="{{ a.poly_count if a and a.poly_count }}">
+<label class="form-label">Description</label><textarea class="form-control mb-3" name="description" rows="3">{{ a.description if a }}</textarea>
+<label class="form-label">{{ 'Replace file (creates new version)' if a else 'File' }}</label>
+<div id="dz" class="dz mb-3"><input type="file" name="file" id="f" hidden><span id="dzt">Drag &amp; drop a file here, or click to browse</span></div>
+<button class="btn btn-primary">Save</button> <a class="btn btn-light" href="{{ url_for('assets') }}">Cancel</a>
+</form></div></div></div>
+<script>
+const dz=document.getElementById('dz'),f=document.getElementById('f'),t=document.getElementById('dzt');
+dz.onclick=()=>f.click();
+f.onchange=()=>{if(f.files[0])t.textContent=f.files[0].name};
+['dragover','dragenter'].forEach(e=>dz.addEventListener(e,x=>{x.preventDefault();dz.classList.add('on')}));
+['dragleave','drop'].forEach(e=>dz.addEventListener(e,x=>{x.preventDefault();dz.classList.remove('on')}));
+dz.addEventListener('drop',x=>{f.files=x.dataTransfer.files;f.onchange()});
+</script>{% endblock %}
